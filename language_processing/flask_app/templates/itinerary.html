@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itinerary Display</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <h1>Your Itinerary</h1>
+
+    {% for day in days %}
+        <div style="border: 1px solid black; margin-top: 10px; margin-bottom: 10px;">
+            <h2>{{ day["date"] }}</h2>
+            <ul>
+                {% for visit in day["Visits"] %}
+                    <li>{{ visit["Poi"]["name"] }} {{ visit["StartVisit"] }}-{{ visit["EndVisit"] }} </li>
+                {% endfor %}
+            </ul>
+            <br>
+            <div id='map-{{ day["DayNumber"] }}' style="height: 500px;"></div>
+        </div>
+        <script>
+            // Sample POI data with latitudes and longitudes
+            var poiData = [
+                {% for visit in day["Visits"] %}
+                { lat: {{ visit["Poi"]["lat"] }}, lon: {{ visit["Poi"]["lon"] }}, name: '{{ visit["Poi"]["name"] }}' }{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ];
+
+            // Initialize the map
+            var map = L.map('map-{{ day["DayNumber"] }}').setView([50.0647, 19.9450], 13);
+
+            // Add the OpenStreetMap layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Custom marker icon
+            function createCustomIcon(index, name) {
+                return L.divIcon({
+                    className: 'custom-marker',
+                    html: '<div>' + index + '<br>' + name + '</div>',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30],
+                });
+            }
+
+            // Add markers with labels for each POI
+            for (var i = 0; i < poiData.length; i++) {
+                var poi = poiData[i];
+                var marker = L.marker([poi.lat, poi.lon], { icon: createCustomIcon(i + 1, poi.name) }).addTo(map);
+
+            }
+
+            // Draw a polyline connecting the points
+            L.polyline(poiData.map(poi => [poi.lat, poi.lon]), { color: 'red' }).addTo(map);
+        </script>
+    {% endfor %}
+
+<style>
+    /* Add some CSS for custom marker style */
+    .custom-marker {
+        background-color: #2196F3;
+        color: #000;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 30px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+</style>
+</body>
+</html>

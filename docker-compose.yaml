@@ -1,0 +1,68 @@
+version: '3.7'
+
+services:
+  mongodb:
+    image: ${MONGO_IMAGE}:${MONGO_TAG}
+    container_name: mongodb
+
+  qdrant:
+    image: ${QDRANT_IMAGE}:${QDRANT_TAG}
+    container_name: qdrant
+
+  embeddings_loader:
+    image: ${FLASK_APP_IMAGE}:${FLASK_APP_TAG}
+    container_name: embeddings_loader
+    command: embeddings-loader
+    depends_on:
+      - mongodb
+      - qdrant
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - QDRANT_URL=http://qdrant:6333
+      - MONGO_URL=mongodb://mongodb:27017
+      - SOURCE_FILE_PATH=/app/source_file.json
+      - SOURCE_TYPE=${EMBEDDINGS_LOADER_SOURCE_TYPE}
+    volumes:
+      - ${EMBEDDINGS_LOADER_SOURCE_FILE_PATH}:/app/source_file.json
+
+  mongo_loader:
+    image: ${FLASK_APP_IMAGE}:${FLASK_APP_TAG}
+    container_name: mongo_loader
+    command: mongo-loader
+    depends_on:
+      - mongodb
+      - qdrant
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - QDRANT_URL=http://qdrant:6333
+      - MONGO_URL=mongodb://mongodb:27017
+      - POIS_FILE_PATH=/app/pois.json
+      - CATEGORIES_FILE_PATH=/app/categories.json
+    volumes:
+      - ${POIS_FILE_PATH}:/app/pois.json
+      - ${CATEGORIES_FILE_PATH}:/app/categories.json
+
+  flask_app:
+    image: ${FLASK_APP_IMAGE}:${FLASK_APP_TAG}
+    container_name: flask_app
+    command: start_server
+    depends_on:
+      mongodb:
+        condition: service_started
+      qdrant:
+        condition: service_started
+      embeddings_loader:
+        condition: service_completed_successfully
+      mongo_loader:
+        condition: service_completed_successfully
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - QDRANT_URL=http://qdrant:6333
+      - MONGO_URL=mongodb://mongodb:27017
+      - ORIENTEERING_URL=http://genetic_algorithm:6000/best-route
+    ports:
+      - "5000:5000"
+
+  genetic_algorithm:
+    image: ${GENETIC_ALGORITHM_IMAGE}:${GENETIC_ALGORITHM_TAG}
+    container_name: genetic_algorithm
