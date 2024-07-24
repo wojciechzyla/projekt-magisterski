@@ -2,6 +2,15 @@
 
 This application was created as part of my master's thesis. Its purpose is to generate a personalized travel plan for the city of Kraków in Poland. The selection of points of interest is based on the textual description of travel desires provided by the tourist.
 
+General overview of the algorithm:
+[!algorithm](readme_images/algorithm.png)
+
+
+Screenshots from the application:
+[!user_input](readme_images/user_input.png)
+[!plan_](readme_images/plan_1.png)
+[!plan_2](readme_images/plan_2.png)
+[!plan_3](readme_images/plan_3.png)
 
 ## Running the project
 
