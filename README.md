@@ -1,28 +1,32 @@
-# System wirtualnego biura turystycznego
+# Virtual Tourist Office System
 
-Uruchomienie systemu wymaga zainstalowanej platformy Docker (https://www.docker.com/) oraz
-własnego konta w OpenAI API (https://openai.com/index/openai-api) wraz z kluczem.
+This application was created as part of my master's thesis. Its purpose is to generate a personalized travel plan for the city of Kraków in Poland. The selection of points of interest is based on the textual description of travel desires provided by the tourist.
 
-Oprócz kodu aplikacji, w repozytorium znajdują się następujące pliki:
-- .env - plik z konfiguracją
+
+## Running the project
+
+Starting the system requires an installed Docker platform (https://www.docker.com/) and 
+your own OpenAI API account (https://openai.com/index/openai-api) along with a key.
+
+In addition to the application code, the repository contains the following files:
+- .env - configuration file
 - embeddings.json
 - pois.json
 - categories.json
 - docker-compose.yaml
 
-W pliku `.env` należy uzupełnić następujące zmienne:
-- do zmiennej `OPENAI_API_KEY` należy podać swój klucz do API OpenAI
-- do zmiennej `EMBEDDINGS_LOADER_SOURCE_FILE_PATH` należy podać bezwzględną ścieżkę do pliku `embeddings.json`
-- do zmiennej `POIS_FILE_PATH` należy podać bezwzględną ścieżkę do pliku `pois.json`
-- do zmiennej `CATEGORIES_FILE_PATH` należy podać bezwzględną ścieżkę do pliku `categories.json`
+In the `.env` file, you need to fill in the following variables:
+- for the `OPENAI_API_KEY` variable, provide your OpenAI API key
+- for the `EMBEDDINGS_LOADER_SOURCE_FILE_PATH` variable, provide the absolute path to the `embeddings.json` file
+- for the `POIS_FILE_PATH` variable, provide the absolute path to the `pois.json` file
+- for the `CATEGORIES_FILE_PATH` variable, provide the absolute path to the `categories.json` file
 
-
-Po uzupełnieniu pliku `.env`, wewnątrz repozytorium należy wykonać poniższą komendę:
+After filling in the `.env` file, run the following command inside the repository:
 
 ```commandline
 docker compose -f docker-compose.yaml up
 ```
 
-Dwa kontenery, `mongo_loader` oraz `embeddings_loader` po kilku sekundach znajdą się w stanie Exited. Jest to normalne 
-i pożądane zachowanie. Gdy kontener `flask_app` wystartuje, w przeglądarce należy wpisać adres `0.0.0.0:5000`. Pierwsze
-wykonanie zapytanie w aplikacji zajmuje trochę więcej czasu. Każde kolejne jest szybsze.
+Two containers, mongo_loader and embeddings_loader, will be in the Exited state after a few seconds. This is normal
+and desired behavior. When the flask_app container starts, enter the address 0.0.0.0:5000 in your browser. The first
+query execution in the application takes a bit more time. Each subsequent one is faster.
