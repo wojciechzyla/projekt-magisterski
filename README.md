@@ -4,22 +4,22 @@ This application was created as part of my master's thesis. Its purpose is to ge
 
 ### General overview of the algorithm:
 
-<img src="readme_images/algorithm.png" alt="algorithm" style="width: 500px;"/>
+<img src="readme_images/algorithm.png" alt="algorithm" style="width: 700px;"/>
 
 
 
 ### Screenshots from the application:
 
-<img src="readme_images/user_input.png" alt="user_input" style="width: 500px;"/>
+<img src="readme_images/user_input.png" alt="user_input" style="width: 700px;"/>
 
 
-<img src="readme_images/plan_1.png" alt="plan_1" style="width: 500px;"/>
+<img src="readme_images/plan_1.png" alt="plan_1" style="width: 700px;"/>
 
 
-<img src="readme_images/plan_2.png" alt="plan_2" style="width: 500px;"/>
+<img src="readme_images/plan_2.png" alt="plan_2" style="width: 700px;"/>
 
 
-<img src="readme_images/plan_3.png" alt="plan_3" style="width: 500px;"/>
+<img src="readme_images/plan_3.png" alt="plan_3" style="width: 700px;"/>
 
 
 ## Running the project
